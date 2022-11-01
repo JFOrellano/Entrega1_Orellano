@@ -1,0 +1,37 @@
+{% extends "home/index.html" %}
+{% load static %}
+
+{% block my_blog_title %}
+Players
+{% endblock %}
+
+{% block my_blog_header %}
+    <header class="masthead" style="background-image: url('../../static/home/assets/img/PLAYERS.jpg')">
+        <div class="container position-relative px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-15 col-lg-16 col-xl-14">
+                    <div class="site-heading">
+                        <h1>Listado de Jugadores</h1>
+                        <span class="subheading">My blog CoderHouse</span>
+                    </div>
+                </div>
+            </div>
+            <a class="button_custom" href="{% url 'players:player-add' %}">Incluir nuevo jugador</a>
+        </div>
+    </header>
+{% endblock %}
+
+{% block my_blog_content %}
+{% for player in players %}
+        <!-- Post preview-->
+        <div class="post-preview">
+            <h3 class="post-title">Nombre: {{ player.name }} </h3>
+            <h3 class="post-subtitle">Apellido: {{ player.last_name }}</h3>
+            <h3 class="post-subtitle">Equipo: {{ player.team }}</h3>
+            <h3 class="post-subtitle">Número: {{ player.number }}</h3>
+            <h3 class="post-subtitle">Posición: {{ player.position }}</h3>
+        </div>
+        <!-- Divider-->
+        <hr class="my-4" />
+    {% endfor %}
+{% endblock %}
