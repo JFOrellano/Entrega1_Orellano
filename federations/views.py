@@ -1,3 +1,4 @@
+from django.forms.models import model_to_dict
 from django.shortcuts import render
 from django.contrib import messages
 from federations.models import Federation
@@ -54,4 +55,64 @@ def create_federation(request):
         request=request,
         context=context_dict,
         template_name="federations/federations_form.html",
+    )
+
+def federation_detail(request, pk: int):
+    return render(
+        request=request,
+        context={"federation": Federation.objects.get(pk=pk)},
+        template_name="federations/federation_detail.html",
+    )
+
+
+def federation_update(request, pk: int):
+    federation = Federation.objects.get(pk=pk)
+
+    if request.method == "POST":
+        federation_form = FederationForm(request.POST)
+        if federation_form.is_valid():
+            data = federation_form.cleaned_data
+            federation.name=data["name"]
+            federation.initials=data["initials"]
+            federation.official_website=data["official_website"]
+            federation.save()
+
+            return render(
+                request=request,
+                context={"federation": federation},
+                template_name="federations/federation_detail.html",
+            )
+
+    federation_form = FederationForm(model_to_dict(Federation))
+    context_dict = {
+        "federation": federation,
+        "form": federation_form,
+    }
+    return render(
+        request=request,
+        context=context_dict,
+        template_name="federations/federations_form.html",
+    )
+
+
+def federation_delete(request, pk: int):
+    federation = Federation.objects.get(pk=pk)
+    if request.method == "POST":
+        federation.delete()
+
+        federations = Federation.objects.all()
+        context_dict = {"federations": federations}
+        return render(
+            request=request,
+            context=context_dict,
+            template_name="federations/federations_list.html",
+        )
+
+    context_dict = {
+        "federation": federation,
+    }
+    return render(
+        request=request,
+        context=context_dict,
+        template_name="federations/federation_confirm_delete.html",
     )
