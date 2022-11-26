@@ -10,7 +10,7 @@
         <meta name="author" content="" />
         <title>
             {% block my_blog_title %}
-                Home
+                Registro
             {% endblock %}
         </title>
         <link rel="icon" type="image/x-icon" href="{% static  'home/assets/favicon.ico' %" />
@@ -26,9 +26,9 @@
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
             <div class="container px-4 px-lg-5">
-                <a class="navbar-brand" href="{% url 'home:index' %}">HOME</a>
+                <a class="navbar-brand" href="{% url 'home:index' %}">REGISTRO</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                    Menu
+                    Registro
                     <i class="fas fa-bars"></i>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
@@ -36,8 +36,8 @@
                         <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'federations:federations-list' %}">Federaciones</a></li>
                         <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'teams:teams-list' %}">Equipos</a></li>
                         <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'players:players-list' %}">Jugadores</a></li>
-                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'register:registro' %}">Registro</a></li>
-                    </ul>
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'players:players-list' %}">Registro</a></li>
+    </ul>
                 </div>
             </div>
         </nav>
@@ -94,12 +94,12 @@
                     <hr class="my-4" />
 
                     <!-- Si hay resultados en el buscador los presenta -->
-                    {% if federations %}
-                    {% for federation in federations %}
+                    {% if registers %}
+                    {% for register in registers %}
                         <!-- Post preview-->
                         <div class="post-preview">
-                            <h2 class="post-title">Federación: {{ federation.name }}</h2>
-                            <h3 class="post-subtitle">Sigla: {{ federation.initials }}</h3>
+                            <h2 class="post-title">Registro: {{ register.name }}</h2>
+                            <h3 class="post-subtitle">Sigla: {{ register.initials }}</h3>
                             <p class="post-meta">
                                 Creado por
                                 <a href="#!">FIFA</a> 
