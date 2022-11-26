@@ -1,0 +1,46 @@
+{% extends "home/index.html" %}
+{% load static %}
+
+{% block my_blog_title %}
+Federations
+{% endblock %}
+
+{% block my_blog_header %}
+    <header class="masthead" style="background-image: url('../../static/home/assets/img/FIFA.jpg')">
+        <div class="container position-relative px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-15 col-lg-16 col-xl-14">
+                    <div class="site-heading">
+                        <h1>Detalle de Federacion</h1>
+                        <span class="subheading">My blog CoderHouse</span>
+                    </div>
+                </div>
+            </div>
+            <a class="button_custom" href="{% url 'federations:federation-add' %}">Incluir</a>
+        </div>
+    </header>
+{% endblock %}
+
+{% block my_blog_content %}
+        <!-- Post preview-->
+    <div class="post-preview">
+        <h3 class="post-subtitle">Federación: {{ federation.name }} </h3>
+        <p class="post-meta">
+            Creado por
+            <a href="#!">Start Bootstrap</a> 
+            en {{ federation.created_at }}
+            <br>
+            Última fecha de actualización {{ federation.updated_at }}
+        </p>
+        <p class="card-text ">{{ federation.description|safe }}</p> <!-- ckeditor-->
+        <p style="text-align: center">
+            <a href="{% url 'federations:federation-update' federation.id %}">
+                <i class="fa fa-pencil" style="color: #1c1c91;"></i> Editar
+            </a>
+            &ensp; | &ensp;
+            <a href="{% url 'federations:federation-delete' federation.id %}">
+                <i class="fa fa-trash" style="color: #881a1a;"></i> Eliminar 
+            </a>
+        </p>
+    </div>
+{% endblock %}

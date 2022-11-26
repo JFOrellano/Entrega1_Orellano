@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block my_blog_title %}
-Federations
+federation delete
 {% endblock %}
 
 {% block my_blog_header %}
@@ -11,7 +11,7 @@ Federations
             <div class="row gx-4 gx-lg-5 justify-content-center">
                 <div class="col-md-15 col-lg-16 col-xl-14">
                     <div class="site-heading">
-                        <h1>Listado de Federaciones</h1>
+                        <h1>Eliminar federación</h1>
                         <span class="subheading">My blog CoderHouse</span>
                     </div>
                 </div>
@@ -21,17 +21,15 @@ Federations
     </header>
 {% endblock %}
 
+
 {% block my_blog_content %}
-{% for federation in federations %}
-        <!-- Post preview-->
-        <div class="post-preview">
-            <a href="{% url 'federations:federation-detail' federation.id %}">
-                <h3 class="post-title">Federación: {{ federation.name }} </h3>
-                <h3 class="post-subtitle">Sigla: {{ federation.initials }}</h3>
-            </a>
-            <h3 class="post-subtitle">Sitio oficial: {{ federation.official_website }}</h3>
-        </div>
-        <!-- Divider-->
-        <hr class="my-4" />
-    {% endfor %}
+
+<h1>Estás seguro de eliminar la federación: {{ federation.name }}?</h1>
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <input class="btn btn-danger" type="submit" value="Si, eliminar.">
+    <a class="btn btn-primary" href="{% url 'federations:federations-list' %}" >Cancelar</a>
+</form>
+
 {% endblock %}
