@@ -7,6 +7,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserEditForm
 from django.contrib.auth.decorators import login_required
 from federations.models import Federation
+from home.models import Avatar
+from home.forms import AvatarForm
+from django.contrib import messages
+from django.shortcuts import redirect 
+import os
 
 def index(request):
     return render(
@@ -116,3 +121,36 @@ def editarPerfil(request):
         miFormulario = UserEditForm(initial={'email': usuario.email})
 
     return render(request, "final_project/edit_profile.html", {"miFormulario": miFormulario, "usuario": usuario})
+
+from home.models import Avatar
+
+
+def get_avatar_url_ctx(request):
+    avatars = Avatar.objects.filter(user=request.user.id)
+    if avatars.exists():
+        return {"avatar_url": avatars[0].image.url}
+    return {}
+
+def avatar_load(request):
+    if request.method == "POST":
+        form = AvatarForm(request.POST, request.FILES)
+        if form.is_valid and len(request.FILES) != 0:
+            image = request.FILES["image"]
+            avatars = Avatar.objects.filter(user=request.user.id)
+            if not avatars.exists():
+                avatar = Avatar(user=request.user, image=image)
+            else:
+                avatar = avatars[0]
+                if len(avatar.image) > 0:
+                    os.remove(avatar.image.path)
+                avatar.image = image
+            avatar.save()
+            messages.success(request, "Imagen cargada exitosamente")
+            return redirect("home:index")
+
+    form = AvatarForm()
+    return render(
+        request=request,
+        context={"form": form},
+        template_name="home/avatar_form.html",  
+    )
