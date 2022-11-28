@@ -1,4 +1,7 @@
+from django.contrib.auth.models import User
+from django.core.validators import MinLengthValidator
 from django.db import models
+from ckeditor.fields import RichTextField
 
 # Create your models here.
 class Player(models.Model):
@@ -7,6 +10,16 @@ class Player(models.Model):
     team = models.CharField(max_length=40)
     number = models.IntegerField()
     position = models.CharField(max_length=40)
+    description = RichTextField(null=True, blank=True)
 
+    class Meta:
+        unique_together = (
+            "name",
+            "last_name",
+        )
+        ordering = ["-last_name"]
+    
     def  __str__(self):
         return f"{self.name} - {self.last_name} - {self.number}"
+
+

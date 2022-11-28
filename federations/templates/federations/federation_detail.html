@@ -6,7 +6,7 @@ Federations
 {% endblock %}
 
 {% block my_blog_header %}
-    <header class="masthead" style="background-image: url('../../static/home/assets/img/FIFA.jpg')">
+    <header class="masthead" style="background-image: url('/static/home/assets/img/FIFA.jpg')">
         <div class="container position-relative px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
                 <div class="col-md-15 col-lg-16 col-xl-14">
@@ -24,14 +24,16 @@ Federations
 {% block my_blog_content %}
         <!-- Post preview-->
     <div class="post-preview">
-        <h3 class="post-subtitle">Federación: {{ federation.name }} </h3>
-        <p class="post-meta">
-            Creado por
-            <a href="#!">Start Bootstrap</a> 
-            en {{ federation.created_at }}
-            <br>
-            Última fecha de actualización {{ federation.updated_at }}
-        </p>
+        <center>
+            <h3 class="post-subtitle">{{ federation.name }} </h3>
+            <h3 class="post-subtitle">{{ federation.initials }} </h3>
+        </center>
+        <!-- Image -->
+        {% if federation.image %}
+            <div style="text-align: center;">
+                <img height="250px" src="{{ federation.image.url }}">
+            </div>
+        {% endif %}
         <p class="card-text ">{{ federation.description|safe }}</p> <!-- ckeditor-->
         <p style="text-align: center">
             <a href="{% url 'federations:federation-update' federation.id %}">

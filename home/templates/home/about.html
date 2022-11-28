@@ -1,0 +1,43 @@
+{% extends "home/index.html" %}
+{% load static %}
+
+{% block my_blog_title %}
+Acerca de
+{% endblock %}
+
+{% block my_blog_header %}
+    <header class="masthead" style="background-image: url('../../static/home/assets/img/PLAYERS.jpg')">
+        <div class="container position-relative px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-15 col-lg-16 col-xl-14">
+                    <div class="site-heading">
+                        <h1>Quienes somos</h1>
+                        <span class="subheading">My blog CoderHouse</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
+{% block my_blog_content %}
+    <!-- Post preview-->
+    <center>
+        <h1 class="post-title">Orellano Julio</h3>
+    </center>        
+    <h3 class="post-subtitle">Ingeniero en automatización y control industrial buscando nuevos horizontes en el desarrollo de software. </h3>
+    <!-- Divider-->
+    <hr class="my-4" />
+    <center>
+        <h1 class="post-title">Mario Reggiardo</h3>
+    </center>
+    <h3 class="post-subtitle">XXXXXXXXXXXXXXXXXXXXXXXX</h3>
+    <!-- Divider-->
+    <hr class="my-4" />
+    <center>
+        <h1 class="post-title">El proyecto</h3>
+    </center>
+    <h3 class="post-subtitle">El proyecto se trata de un blog de la FIFA en el cual se encuentran las federaciones de fútbol, equipos y jugadores. </h3>
+
+    
+{% endblock %}

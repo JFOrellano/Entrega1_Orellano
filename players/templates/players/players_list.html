@@ -22,11 +22,17 @@ Players
 {% endblock %}
 
 {% block my_blog_content %}
-{% for player in players %}
-        <!-- Post preview-->
+    {% if not player %}
+        <div class="small text-center text-muted fst-italic">No existen jugadores en la base de datos para mostrar</div>
+    {% endif %}
+    {% for player in player_list %}
+    <!-- Post preview-->
         <div class="post-preview">
-            <h3 class="post-title">Nombre: {{ player.name }} </h3>
-            <h3 class="post-subtitle">Apellido: {{ player.last_name }}</h3>
+            <a href="{% url 'players:player-detail' player.id %}">
+                <center>
+                    <h1 class="post-title">{{ player.name }} {{ player.last_name }}</h3>
+                </center>
+            </a>
             <h3 class="post-subtitle">Equipo: {{ player.team }}</h3>
             <h3 class="post-subtitle">Número: {{ player.number }}</h3>
             <h3 class="post-subtitle">Posición: {{ player.position }}</h3>

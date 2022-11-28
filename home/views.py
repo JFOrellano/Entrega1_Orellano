@@ -15,6 +15,13 @@ def index(request):
         template_name="home/index.html",
     )
 
+def about(request):
+    return render(
+        request=request,
+        context={},
+        template_name="home/about.html",
+    )
+
 def search(request):
     search_param = request.GET["search_param"]
     print("search: ", search_param)

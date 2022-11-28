@@ -5,6 +5,7 @@ class Federation(models.Model):
     name = models.CharField(max_length=40)
     initials = models.CharField(max_length=40)
     official_website = models.CharField(max_length=40)
+    image = models.ImageField(upload_to = "shields", null = True, blank= True)
 
     def  __str__(self):
         return f"{self.initials} - {self.name}"
