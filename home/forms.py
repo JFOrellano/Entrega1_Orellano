@@ -13,6 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 
+
 class UserRegisterForm(UserCreationForm):
     username = forms.EmailField()
     email = forms.EmailField()
@@ -39,5 +40,7 @@ class Meta:
     fields = ['username', 'email', 'password1', 'password2', 'last_name', 'first_name']
  
     help_texts = {k:"" for k in fields}
+
+
 
 
