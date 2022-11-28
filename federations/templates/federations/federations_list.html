@@ -6,7 +6,7 @@ Federations
 {% endblock %}
 
 {% block my_blog_header %}
-    <header class="masthead" style="background-image: url('../../static/home/assets/img/FIFA.jpg')">
+    <header class="masthead" style="background-image: url('/static/home/assets/img/FIFA.jpg')">
         <div class="container position-relative px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
                 <div class="col-md-15 col-lg-16 col-xl-14">
@@ -22,6 +22,9 @@ Federations
 {% endblock %}
 
 {% block my_blog_content %}
+{% if not federations %}
+        <div class="small text-center text-muted fst-italic">No existen federaciones en la base de datos para mostrar</div>
+{% endif %}
 {% for federation in federations %}
         <!-- Post preview-->
         <div class="post-preview">

@@ -1,5 +1,5 @@
 from django import forms
-
+from federations.models import Federation
 
 class FederationForm(forms.Form):
     name = forms.CharField(
@@ -7,7 +7,7 @@ class FederationForm(forms.Form):
         required=False,
         widget=forms.TextInput(
             attrs={
-                "class": "course-name",
+                "class": "federation-name",
                 "placeholder": "Nombre de la federación",
                 "required": "True",
             }
@@ -18,7 +18,7 @@ class FederationForm(forms.Form):
         required=False,
         widget=forms.TextInput(
             attrs={
-                "class": "course-name",
+                "class": "federations-initials",
                 "placeholder": "Sigla de la federación",
                 "required": "True",
             }
@@ -29,10 +29,15 @@ class FederationForm(forms.Form):
         required=False,
         widget=forms.TextInput(
             attrs={
-                "class": "course-name",
+                "class": "federations-website",
                 "placeholder": "Sitio oficial",
                 "required": "True",
             }
         ),
     )
+    image = forms.ImageField(required=False)
+
+    class Meta:
+        model = Federation
+        fields = ["name", "initials", "official_website", "image"]
     

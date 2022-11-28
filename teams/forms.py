@@ -1,5 +1,13 @@
 from django import forms
 from django.contrib.admin.widgets import AdminDateWidget
+from federations.models import Federation
+from datetime import datetime
+
+MONTHS = {
+    1:'enero', 2:'febrero', 3:'marzo', 4:'abril',
+    5:'mayo', 6:'junio', 7:'julio', 8:'agosto',
+    9:'septiembre', 10:'octubre', 11:'noviembre', 12:'diciembre'
+}
 
 class TeamForm(forms.Form):
     name = forms.CharField(
@@ -13,10 +21,10 @@ class TeamForm(forms.Form):
             }
         ),
     )
-    federation = forms.CharField(
+    federation = forms.ModelChoiceField(queryset= Federation.objects.all(),
         label="Federacion de pertenencia",
         required=False,
-        widget=forms.TextInput(
+        widget=forms.Select(
             attrs={
                 "class": "federation-name",
                 "placeholder": "Federacion de pertenencia",
@@ -46,6 +54,12 @@ class TeamForm(forms.Form):
             }
         ),
     )
-    fundation_date = forms.DateField(label='Release year', required=False, widget=AdminDateWidget
+    fundation_date = forms.DateField(label='Fecha de fundación', 
+                                    required=False,
+                                    widget=forms.SelectDateWidget(
+                                        years=range(1900, datetime.today().year),
+                                        months = MONTHS,
+                                        empty_label=("Año", "Mes", "Dia"),
+                                    ),
     )
     

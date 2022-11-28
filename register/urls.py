@@ -5,5 +5,5 @@ from register import views
 app_name = "register"
 
 urlpatterns = [
-    path("register", views.register, name="players-list"),
+    path("register", views.register, name="registro"),
     ]
