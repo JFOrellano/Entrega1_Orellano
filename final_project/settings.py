@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'home',
     'teams',
     'players',
-    'register',
+    'registracion',
     ]
 
 MIDDLEWARE = [
@@ -126,7 +126,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-LOGIN_URL = '/final_project/login'
+LOGIN_URL = '/accounts/login/'
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 

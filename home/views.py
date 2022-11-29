@@ -1,17 +1,14 @@
-from django.core.paginator import Paginator
-from django.db.models import Q
-from django.shortcuts import render
-from django.contrib.auth.forms import AuthenticationForm,  UserCreationForm
-from django.contrib.auth.forms import login, logout, authenticate
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.forms import UserEditForm
+import os
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from django.forms.models import model_to_dict
+from django.shortcuts import redirect
+from django.shortcuts import render
+
 from federations.models import Federation
 from home.models import Avatar
-from home.forms import AvatarForm
-from django.contrib import messages
-from django.shortcuts import redirect 
-import os
+#from home.forms import AvatarForm
 
 def index(request):
     return render(
@@ -61,36 +58,32 @@ def login_request(request):
             if user is not None:
                 login(request, user)
 
-                return render(request, "final_project/home.html", {"mensaje":f"Bienvenido {usuario}"} )
+                return render(request, "home/home.html", {"mensaje":f"Bienvenido {usuario}"} )
             else:
 
-                return render(request, "final_project/home.html", {"mensaje":"Datos incorrectos, vuelva a ingresa su usuario."} )
+                return render(request, "home/home.html", {"mensaje":"Datos incorrectos, vuelva a ingresa su usuario."} )
     
     else:
 
-                return render(request, "final_project/home.html", {"mensaje":"Error, formulario incorrecto"} )
+                return render(request, "home/home.html", {"mensaje":"Error, formulario incorrecto"} )
 
     form = AuthenticationForm()
 
-    return render(request, "final_project/login.html", {'form', form})
+    return render(request, "home/login.html", {'form', form})
  
 def register(request):
-    
-    if request.method == 'POST':
-
-        form = UserCreationForm(request.POST)
-
+    form = UserRegisterForm(request.POST) if request.POST else UserRegisterForm()
+    if request.method == "POST":
         if form.is_valid():
-
-            username = form.cleaned_data*['username']
             form.save()
-            return render(request, "final_project/home.html", {"mensaje":"Usuario creado correctamente"} )    
+            messages.success(request, "Usuario creado exitosamente!")
+            return redirect("login")
 
-    else: 
-
-        form = UserCreationForm()
-
-    return render(request, "final_project/login.html", {'form', form})    
+    return render(
+        request=request,
+        context={"form": form},
+        template_name="registration/register.html",
+    )
 
 
 
@@ -131,26 +124,26 @@ def get_avatar_url_ctx(request):
         return {"avatar_url": avatars[0].image.url}
     return {}
 
-def avatar_load(request):
-    if request.method == "POST":
-        form = AvatarForm(request.POST, request.FILES)
-        if form.is_valid and len(request.FILES) != 0:
-            image = request.FILES["image"]
-            avatars = Avatar.objects.filter(user=request.user.id)
-            if not avatars.exists():
-                avatar = Avatar(user=request.user, image=image)
-            else:
-                avatar = avatars[0]
-                if len(avatar.image) > 0:
-                    os.remove(avatar.image.path)
-                avatar.image = image
-            avatar.save()
-            messages.success(request, "Imagen cargada exitosamente")
-            return redirect("home:index")
+# def avatar_load(request):
+#     if request.method == "POST":
+#         form = AvatarForm(request.POST, request.FILES)
+#         if form.is_valid and len(request.FILES) != 0:
+#             image = request.FILES["image"]
+#             avatars = Avatar.objects.filter(user=request.user.id)
+#             if not avatars.exists():
+#                 avatar = Avatar(user=request.user, image=image)
+#             else:
+#                 avatar = avatars[0]
+#                 if len(avatar.image) > 0:
+#                     os.remove(avatar.image.path)
+#                 avatar.image = image
+#             avatar.save()
+#             messages.success(request, "Imagen cargada exitosamente")
+#             return redirect("home:index")
 
-    form = AvatarForm()
-    return render(
-        request=request,
-        context={"form": form},
-        template_name="home/avatar_form.html",  
-    )
+#     form = AvatarForm()
+#     return render(
+#         request=request,
+#         context={"form": form},
+#         template_name="home/avatar_form.html",  
+#     )

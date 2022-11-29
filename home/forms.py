@@ -7,13 +7,6 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, Pass
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-
-
-
-
-
-
-
 class UserRegisterForm(UserCreationForm):
     username = forms.EmailField()
     email = forms.EmailField()
@@ -22,11 +15,11 @@ class UserRegisterForm(UserCreationForm):
     
     last_name = forms.CharField()
     first_name = forms.CharField()
-class Meta:
-    model = User
-    fields = ['username', 'email', 'password1', 'password2', 'last_name', 'first_name']
- 
-    help_texts = {k:"" for k in fields}
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2', 'last_name', 'first_name']
+    
+        help_texts = {k:"" for k in fields}
 
 class UserEditrForm(UserCreationForm):
     email = forms.EmailField(label="Modificar E-mail")
@@ -35,11 +28,11 @@ class UserEditrForm(UserCreationForm):
 
     last_name = forms.CharField()
     first_name = forms.CharField() 
-class Meta:
-    model = User
-    fields = ['username', 'email', 'password1', 'password2', 'last_name', 'first_name']
- 
-    help_texts = {k:"" for k in fields}
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2', 'last_name', 'first_name']
+    
+        help_texts = {k:"" for k in fields}
 
 
 
