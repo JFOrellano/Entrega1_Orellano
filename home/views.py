@@ -5,10 +5,20 @@ from django.db.models import Q
 from django.forms.models import model_to_dict
 from django.shortcuts import redirect
 from django.shortcuts import render
+<<<<<<< HEAD
 
 from federations.models import Federation
 from home.models import Avatar
 #from home.forms import AvatarForm
+=======
+from django.contrib.auth.forms import AuthenticationForm,  UserCreationForm
+from federations.models import Federation
+from home.forms import AvatarForm
+from home.forms import UserRegisterForm
+from home.forms import UserUpdateForm
+from home.models import Avatar
+from django.contrib import admin
+>>>>>>> 0dba04d436131733b5081eafe74e04fe290d9c9d
 
 def index(request):
     return render(
@@ -43,18 +53,23 @@ def search(request):
         context=context_dict,
         template_name="home/index.html",
     )
-    
-def login_request(request):
 
+def user_update(request):
+    user = request.user
     if request.method == "POST":
-        form = AuthenticationForm(request, data = request.POST)
-
+        form = UserUpdateForm(request.POST, instance=request.user)
         if form.is_valid():
-            usuario = form.cleaned_data.get('username')
-            contra = form.cleaned_data.get('contraseña')
+            form.save()
+            return redirect("home:index")
 
-            user = authenticate(username=usuario, password=contra)
+    form = UserUpdateForm(model_to_dict(user))
+    return render(
+        request=request,
+        context={"form": form},
+        template_name="registration/user_form.html",  
+    )
 
+<<<<<<< HEAD
             if user is not None:
                 login(request, user)
 
@@ -70,6 +85,8 @@ def login_request(request):
     form = AuthenticationForm()
 
     return render(request, "home/login.html", {'form', form})
+=======
+>>>>>>> 0dba04d436131733b5081eafe74e04fe290d9c9d
  
 def register(request):
     form = UserRegisterForm(request.POST) if request.POST else UserRegisterForm()
@@ -86,34 +103,47 @@ def register(request):
     )
 
 
+@login_required
+def user_update(request):
+    user = request.user
+    if request.method == "POST":
+        form = UserUpdateForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect("home:index")
 
-def editarPerfil(request):
+    form = UserUpdateForm(model_to_dict(user))
+    return render(
+        request=request,
+        context={"form": form},
+        template_name="registration/user_form.html",
+    )
 
-    usuario = request.user
 
-    if request.method == 'POST':
+@login_required
+def avatar_load(request):
+    if request.method == "POST":
+        form = AvatarForm(request.POST, request.FILES)
+        if form.is_valid and len(request.FILES) != 0:
+            image = request.FILES["image"]
+            avatars = Avatar.objects.filter(user=request.user.id)
+            if not avatars.exists():
+                avatar = Avatar(user=request.user, image=image)
+            else:
+                avatar = avatars[0]
+                if len(avatar.image) > 0:
+                    os.remove(avatar.image.path)
+                avatar.image = image
+            avatar.save()
+            messages.success(request, "Imagen cargada exitosamente")
+            return redirect("home:index")
 
-        miFormulario = UserEditForm(request.POST)
-
-        if miFormulario.is_valid():
-
-            informacion = miFormulario.cleaned_data
-
-            usuario.email = informacion['email']
-            usuario.password1 = informacion['password1']
-            usuario.password2 = informacion['password2']
-            usuario.last_name = informacion['last_name']
-            usuario.first_name = informacion['first_name']
-
-            usuario.save()
-
-            return render(request, "final_project/inicio.html")
-
-    else:
-
-        miFormulario = UserEditForm(initial={'email': usuario.email})
-
-    return render(request, "final_project/edit_profile.html", {"miFormulario": miFormulario, "usuario": usuario})
+    form = AvatarForm()
+    return render(
+        request=request,
+        context={"form": form},
+        template_name="home/avatar_form.html",
+    )
 
 from home.models import Avatar
 

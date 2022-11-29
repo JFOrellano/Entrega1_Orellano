@@ -9,7 +9,10 @@ urlpatterns = [
     path('', include("players.urls")),
     path("", include("home.urls")),
     path('', include("registracion.urls")),
+<<<<<<< HEAD
     path('accounts/',include('django.contrib.auth.urls')),
+=======
+>>>>>>> 0dba04d436131733b5081eafe74e04fe290d9c9d
         ]
 
 if settings.DEBUG:
