@@ -36,7 +36,7 @@
                         <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'federations:federations-list' %}">Federaciones</a></li>
                         <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'teams:teams-list' %}">Equipos</a></li>
                         <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'players:players-list' %}">Jugadores</a></li>
-                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'Login' %}">Users</a></li>
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'home:login' %}">Jugadores</a></li>
                        
                         {% if user.is_authenticated %}
                         <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'home:user-update' %}">Editar usuario</a></li>
@@ -68,7 +68,7 @@
                                 <span class="subheading">A Blog Theme by Start Bootstrap</span>
                             {% endif %}
                             {% if avatar_url %}
-                                <a href="{% url 'home:avatar-load' %}"><img height="260px" src="{{avatar_url}}"></a>
+                                <a href="{% url 'home:avatar' %}"><img height="260px" src="{{avatar_url}}"></a>
                             {% endif %}
                             <h1>FIFA</h1>
                             <span class="subheading">Fédération Internationale de Football Association</span>

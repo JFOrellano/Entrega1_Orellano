@@ -1,17 +1,17 @@
-from django.core.paginator import Paginator
+import os
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.forms.models import model_to_dict
+from django.shortcuts import redirect
 from django.shortcuts import render
 from django.contrib.auth.forms import AuthenticationForm,  UserCreationForm
-from django.contrib.auth.forms import login, logout, authenticate
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.forms import UserEditForm
-from django.contrib.auth.decorators import login_required
 from federations.models import Federation
-from home.models import Avatar
 from home.forms import AvatarForm
-from django.contrib import messages
-from django.shortcuts import redirect 
-import os
+from home.forms import UserRegisterForm
+from home.forms import UserUpdateForm
+from home.models import Avatar
+from django.contrib import admin
 
 def index(request):
     return render(
@@ -39,81 +39,79 @@ def search(request):
         context=context_dict,
         template_name="home/index.html",
     )
-    
-def login_request(request):
 
+def user_update(request):
+    user = request.user
     if request.method == "POST":
-        form = AuthenticationForm(request, data = request.POST)
-
+        form = UserUpdateForm(request.POST, instance=request.user)
         if form.is_valid():
-            usuario = form.cleaned_data.get('username')
-            contra = form.cleaned_data.get('contraseña')
+            form.save()
+            return redirect("home:index")
 
-            user = authenticate(username=usuario, password=contra)
+    form = UserUpdateForm(model_to_dict(user))
+    return render(
+        request=request,
+        context={"form": form},
+        template_name="registration/user_form.html",  
+    )
 
-            if user is not None:
-                login(request, user)
-
-                return render(request, "final_project/home.html", {"mensaje":f"Bienvenido {usuario}"} )
-            else:
-
-                return render(request, "final_project/home.html", {"mensaje":"Datos incorrectos, vuelva a ingresa su usuario."} )
-    
-    else:
-
-                return render(request, "final_project/home.html", {"mensaje":"Error, formulario incorrecto"} )
-
-    form = AuthenticationForm()
-
-    return render(request, "final_project/login.html", {'form', form})
  
 def register(request):
-    
-    if request.method == 'POST':
-
-        form = UserCreationForm(request.POST)
-
+    form = UserRegisterForm(request.POST) if request.POST else UserRegisterForm()
+    if request.method == "POST":
         if form.is_valid():
-
-            username = form.cleaned_data*['username']
             form.save()
-            return render(request, "final_project/home.html", {"mensaje":"Usuario creado correctamente"} )    
+            messages.success(request, "Usuario creado exitosamente!")
+            return redirect("login")
 
-    else: 
+    return render(
+        request=request,
+        context={"form": form},
+        template_name="registration/register.html",
+    )
 
-        form = UserCreationForm()
 
-    return render(request, "final_project/login.html", {'form', form})    
+@login_required
+def user_update(request):
+    user = request.user
+    if request.method == "POST":
+        form = UserUpdateForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect("home:index")
+
+    form = UserUpdateForm(model_to_dict(user))
+    return render(
+        request=request,
+        context={"form": form},
+        template_name="registration/user_form.html",
+    )
 
 
+@login_required
+def avatar_load(request):
+    if request.method == "POST":
+        form = AvatarForm(request.POST, request.FILES)
+        if form.is_valid and len(request.FILES) != 0:
+            image = request.FILES["image"]
+            avatars = Avatar.objects.filter(user=request.user.id)
+            if not avatars.exists():
+                avatar = Avatar(user=request.user, image=image)
+            else:
+                avatar = avatars[0]
+                if len(avatar.image) > 0:
+                    os.remove(avatar.image.path)
+                avatar.image = image
+            avatar.save()
+            messages.success(request, "Imagen cargada exitosamente")
+            return redirect("home:index")
 
-def editarPerfil(request):
-
-    usuario = request.user
-
-    if request.method == 'POST':
-
-        miFormulario = UserEditForm(request.POST)
-
-        if miFormulario.is_valid():
-
-            informacion = miFormulario.cleaned_data
-
-            usuario.email = informacion['email']
-            usuario.password1 = informacion['password1']
-            usuario.password2 = informacion['password2']
-            usuario.last_name = informacion['last_name']
-            usuario.first_name = informacion['first_name']
-
-            usuario.save()
-
-            return render(request, "final_project/inicio.html")
-
-    else:
-
-        miFormulario = UserEditForm(initial={'email': usuario.email})
-
-    return render(request, "final_project/edit_profile.html", {"miFormulario": miFormulario, "usuario": usuario})
+    form = AvatarForm()
+    return render(
+        request=request,
+        context={"form": form},
+        template_name="home/avatar_form.html",
+    )
 
 from home.models import Avatar
 
