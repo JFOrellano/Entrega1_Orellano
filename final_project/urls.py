@@ -8,7 +8,7 @@ urlpatterns = [
     path('', include("teams.urls")),
     path('', include("players.urls")),
     path("", include("home.urls")),
-    path('', include("register.urls")),
+    path('', include("registracion.urls")),
         ]
 
 if settings.DEBUG:
