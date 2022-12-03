@@ -10,8 +10,8 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("search/", views.search, name="search"),
     path("about/", views.about, name="about"),
-    path('login', views.login_request, name='login'),
-    path('register', views.registracion, name='user-register'),
+    path('login', views.login_required, name='login'),
+    path('register', views.register, name='user-register'),
     path('register/update/', views.user_update, name='user-update'),
     path(
         'password_change/',
