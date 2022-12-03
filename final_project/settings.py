@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'home',
     'teams',
     'players',
-    'registracion',
+    'ckeditor',
     ]
 
 MIDDLEWARE = [
