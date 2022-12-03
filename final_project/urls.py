@@ -8,11 +8,7 @@ urlpatterns = [
     path('', include("teams.urls")),
     path('', include("players.urls")),
     path("", include("home.urls")),
-    path('', include("registration.urls")),
-    <<<<<<< HEAD
-    path('accounts/',include('django.contrib.auth.urls')),
-=======
->>>>>>> 
+         
     ]
 
 if settings.DEBUG:
