@@ -48,27 +48,14 @@ def search(request):
         template_name="home/index.html",
     )
 
-def user_update(request):
-    user = request.user
-    if request.method == "POST":
-        form = UserUpdateForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            return redirect("home:index")
 
-    form = UserUpdateForm(model_to_dict(user))
-    return render(
-        request=request,
-        context={"form": form},
-        template_name="registration/user_form.html",  
-    )
 def register(request):
     form = UserRegisterForm(request.POST) if request.POST else UserRegisterForm()
     if request.method == "POST":
         if form.is_valid():
             form.save()
             messages.success(request, "Usuario creado exitosamente!")
-            return redirect("login")
+            return redirect("home:login")
 
     return render(
         request=request,
@@ -92,7 +79,6 @@ def user_update(request):
         context={"form": form},
         template_name="registration/user_form.html",
     )
-
 
 @login_required
 def avatar_load(request):
