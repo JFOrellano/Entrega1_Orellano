@@ -35,18 +35,20 @@
                     <ul class="navbar-nav ms-auto py-4 py-lg-0">
                         <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'federations:federations-list' %}">Federaciones</a></li>
                         <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'teams:teams-list' %}">Equipos</a></li>
-                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'players:players-list' %}">Jugadores</a></li>
-                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'home:user-register' %}">Registarte</a></li>                    
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'players:players-list' %}">Jugadores</a></li>   
+                        
+                        <div class="topbar-divider d-none d-sm-block"></div>
+                        
+                        {% if not user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'home:user-register' %}">Registrate</a></li>
+                        {% endif %}
                         {% if user.is_authenticated %}
                         <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'home:user-update' %}">Editar usuario</a></li>
-                        
-                       
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'logout' %}">Cerrar Sesión - {{ user.username }}</a></li>                  
                         {% else %}
-                       
                         <!--<li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'home:login' %}">Iniciar Sesión</a></li>-->
-                       
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'login' %}">Iniciar Sesión</a></li>
                         {% endif %}
-                    
                     </ul>
 
                 </div>
@@ -60,11 +62,10 @@
                     <div class="col-md-10 col-lg-8 col-xl-7">
                         <div class="site-heading">
                             {% if user.is_authenticated %}
-                                <h3>{{ user.first_name }} {{ user.last_name }}</h3>
-                                <h4>Bienvenido</h4>
+                                <h3>Bienvenido {{ user.first_name }} {{ user.last_name }}</h3>
                             {% else %}
-                                <h1>Clean Blog</h1>
-                                <span class="subheading">A Blog Theme by Start Bootstrap</span>
+                                <h2>Bienvenido</h2>
+                                <span class="subheading">Registrese o inicie sesion para continuar</span>
                             {% endif %}
                             {% if avatar_url %}
                                 <a href="{% url 'home:avatar' %}"><img height="260px" src="{{avatar_url}}"></a>
