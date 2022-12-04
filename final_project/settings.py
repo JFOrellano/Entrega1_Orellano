@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'home',
     'teams',
     'players',
-    'registracion',
     ]
 
 MIDDLEWARE = [

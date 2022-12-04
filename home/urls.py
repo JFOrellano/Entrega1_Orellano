@@ -10,15 +10,9 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("search/", views.search, name="search"),
     path("about/", views.about, name="about"),
-    path('login', views.login_request, name='login'),
-<<<<<<< HEAD
-#    path('registracion', views.registracion, name='Register'),
-=======
-    path('registracion', views.register, name='Register'),
->>>>>>> 0dba04d436131733b5081eafe74e04fe290d9c9d
-    path('logout', LogoutView.as_view(template_name='home/logout.html'), name='logout'),
-    path('editarPerfil',views.editarPerfil,name='EditarPerfil'),
-#    path('registracion/update/', views.user_update, name='user-update'),
+    path('login', views.login_required, name='login'),
+    path('register', views.register, name='user-register'),
+    path('register/update/', views.user_update, name='user-update'),
     path(
         'password_change/',
         auth_views.PasswordChangeView.as_view(
