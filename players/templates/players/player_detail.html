@@ -31,22 +31,50 @@ Player detail
     <h3 class="post-subtitle">Equipo: {{ player.team }}</h3>
     <h3 class="post-subtitle">Número: {{ player.number }}</h3>
     <h3 class="post-subtitle">Posición: {{ player.position }}</h3>
-    
+    <p class="post-meta">
+        Creado por
+        <span style="color: #0b4956;" href="">{{ player.owner.username }}</span>
+        ( {{ player.created_at }} )
+        <br>
+        Última fecha de actualización ( {{ player.updated_at }} )
+    </p>
     
 
     <!-- Update-Delete link only for the owner -->
-    <p style="text-align: center">
-        <a href="{% url 'players:player-update' player.id %}">
-            <i class="fa fa-pencil" style="color: #1c1c91;"></i> Editar
-        </a>
-        &ensp; | &ensp;
-        <a href="{% url 'players:player-delete' player.id %}">
-                <i class="fa fa-trash" style="color: #881a1a;"></i> Eliminar
-        </a>
-    </p>
-    
+    {% if user == course.owner or user.is_superuser %}
+        <p style="text-align: center">
+            <a href="{% url 'players:player-update' player.id %}">
+                <i class="fa fa-pencil" style="color: #1c1c91;"></i> Editar
+            </a>
+            &ensp; | &ensp;
+            <a href="{% url 'players:player-delete' player.id %}">
+                    <i class="fa fa-trash" style="color: #881a1a;"></i> Eliminar
+            </a>
+        </p>
+    {% endif %}
+
     <!-- Divider-->
     <hr class="my-4" />
+
+    <!-- Comment creation -->
+    <form method="POST" action="{% url 'players:comment-create' player.id %}">
+        {% csrf_token %}
+        {{ comment_form }}
+    <input type="submit" value="Publicar comentario">
+    </form>
+    {% if not comments %}
+        <p></p>
+    {% endif %}
+
+    <!-- Comments list -->
+    {% for comment in comments %}
+        <p> {{ comment.text }}
+            ({{ comment.owner.username }} | {{ comment.updated_at }})
+            {% if user == comment.owner or user.is_superuser %}
+            <a href="{% url 'players:comment-delete' comment.id %}"><i class="fa fa-trash" style="color: #881a1a;"></i></a>
+            {% endif %}
+        </p>
+    {% endfor %}
 
 
 </div>

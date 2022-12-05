@@ -10,6 +10,12 @@ class Player(models.Model):
     team = models.CharField(max_length=40)
     number = models.IntegerField()
     position = models.CharField(max_length=40)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    comments = models.ManyToManyField(
+        User, through="Comment", related_name="comments_owned"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     
 
     class Meta:
@@ -22,4 +28,13 @@ class Player(models.Model):
     def  __str__(self):
         return f"{self.name} - {self.last_name} - {self.number}"
 
-
+class Comment(models.Model):
+    text = models.TextField(
+        validators=[
+            MinLengthValidator(10, "El comentario debe ser mayor de 10 caracteres")
+        ]
+    )
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

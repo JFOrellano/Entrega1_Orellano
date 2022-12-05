@@ -35,14 +35,16 @@ Federations
             </div>
         {% endif %}
         <p class="card-text ">{{ federation.description|safe }}</p> <!-- ckeditor-->
-        <p style="text-align: center">
-            <a href="{% url 'federations:federation-update' federation.id %}">
-                <i class="fa fa-pencil" style="color: #1c1c91;"></i> Editar
-            </a>
-            &ensp; | &ensp;
-            <a href="{% url 'federations:federation-delete' federation.id %}">
-                <i class="fa fa-trash" style="color: #881a1a;"></i> Eliminar 
-            </a>
-        </p>
+        {% if user == federation.owner or user.is_superuser %}
+            <p style="text-align: center">
+                <a href="{% url 'federations:federation-update' federation.id %}">
+                    <i class="fa fa-pencil" style="color: #1c1c91;"></i> Editar
+                </a>
+                &ensp; | &ensp;
+                <a href="{% url 'federations:federation-delete' federation.id %}">
+                    <i class="fa fa-trash" style="color: #881a1a;"></i> Eliminar 
+                </a>
+            </p>
+        {% endif %}
     </div>
 {% endblock %}

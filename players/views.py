@@ -9,8 +9,8 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from players.models import Player
 from players.forms import PlayerForm
+from players.models import Comment
 from players.forms import CommentForm
-
 
 # Create your views here.
 class PlayerListView(ListView):
@@ -19,15 +19,15 @@ class PlayerListView(ListView):
     paginate_by = 3
 
 
-class PlayerCreateView(CreateView):
+class PlayerCreateView(LoginRequiredMixin,CreateView):
     model = Player
     success_url = reverse_lazy("players:players-list")
 
     form_class = PlayerForm
-    # fields = ["name", "code", "description", "image"]
 
     def form_valid(self, form):
         data = form.cleaned_data
+        form.instance.owner = self.request.user
         actual_objects = Player.objects.filter(
             name=data["name"], last_name=data["last_name"],).count()
         if actual_objects:
@@ -51,12 +51,16 @@ class PlayerDetailView(DetailView):
 
     def get(self, request, pk):
         player = Player.objects.get(id=pk)
+        comments = Comment.objects.filter(player=player).order_by("-updated_at")
+        comment_form = CommentForm()
         context = {
             "player": player,
+            "comments": comments,
+            "comment_form": comment_form,
         }
         return render(request, self.template_name, context)
     
-class PlayerUpdateView(UpdateView):
+class PlayerUpdateView(LoginRequiredMixin,UpdateView):
     model = Player
     fields = ["name", "last_name", "team", "number", "position"]
 
@@ -64,8 +68,23 @@ class PlayerUpdateView(UpdateView):
         player_id = self.kwargs["pk"]
         return reverse_lazy("players:player-detail", kwargs={"pk": player_id})
 
-
-
-class PlayerDeleteView(DeleteView):
+class PlayerDeleteView(LoginRequiredMixin,DeleteView):
     model = Player
     success_url = reverse_lazy("players:players-list")
+
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    def post(self, request, pk):
+        player = get_object_or_404(Player, id=pk)
+        comment = Comment(
+            text=request.POST["comment_text"], owner=request.user, player=player
+        )
+        comment.save()
+        return redirect(reverse("players:player-detail", kwargs={"pk": pk}))
+
+
+class CommentDeleteView(LoginRequiredMixin, DeleteView):
+    model = Comment
+
+    def get_success_url(self):
+        player = self.object.player
+        return reverse("players:player-detail", kwargs={"pk": player.id})

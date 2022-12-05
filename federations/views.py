@@ -1,6 +1,8 @@
 from django.forms.models import model_to_dict
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+
 from federations.models import Federation
 from federations.forms import FederationForm
 
@@ -17,6 +19,7 @@ def federations(request):
         template_name="federations/federations_list.html",
     )
 
+@login_required
 def create_federation(request):
     if request.method == "POST":
         federation_form = FederationForm(request.POST, request.FILES)
@@ -32,7 +35,7 @@ def create_federation(request):
                     f"La federación {data['name']} - {data['initials']} ya existe",
                 )
             else:
-                federation = Federation(name=data["name"], initials=data["initials"], official_website=data["official_website"], image=image)
+                federation = Federation(name=data["name"], initials=data["initials"], official_website=data["official_website"], image=image, owner=request.user)
                 federation.save()
                 messages.success(
                     request,
@@ -64,7 +67,7 @@ def federation_detail(request, pk: int):
         template_name="federations/federation_detail.html",
     )
 
-
+@login_required
 def federation_update(request, pk: int):
     federation = Federation.objects.get(pk=pk)
 
@@ -95,7 +98,7 @@ def federation_update(request, pk: int):
         template_name="federations/federations_form.html",
     )
 
-
+@login_required
 def federation_delete(request, pk: int):
     federation = Federation.objects.get(pk=pk)
     if request.method == "POST":

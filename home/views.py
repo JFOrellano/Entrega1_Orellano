@@ -55,7 +55,7 @@ def register(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Usuario creado exitosamente!")
-            return redirect("home:login")
+            return redirect("login")
 
     return render(
         request=request,
@@ -104,6 +104,7 @@ def avatar_load(request):
         context={"form": form},
         template_name="home/avatar_form.html",
     )
+
 def get_avatar_url_ctx(request):
     avatars = Avatar.objects.filter(user=request.user.id)
     if avatars.exists():

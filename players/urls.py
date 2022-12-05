@@ -13,4 +13,7 @@ urlpatterns = [
     path("player/<int:pk>/detail/", views.PlayerDetailView.as_view(), name="player-detail"),
     path("player/<int:pk>/update/", views.PlayerUpdateView.as_view(), name="player-update"),
     path("player/<int:pk>/delete/", views.PlayerDeleteView.as_view(), name="player-delete"),
+
+    path("comment/<int:pk>/add/", views.CommentCreateView.as_view(), name="comment-create"),
+    path("comment/<int:pk>/delete/", views.CommentDeleteView.as_view(), name="comment-delete"),
 ]

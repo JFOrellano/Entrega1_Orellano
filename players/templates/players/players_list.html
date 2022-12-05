@@ -22,7 +22,7 @@ Players
 {% endblock %}
 
 {% block my_blog_content %}
-    {% if not player %}
+    {% if not player_list %}
         <div class="small text-center text-muted fst-italic">No existen jugadores en la base de datos para mostrar</div>
     {% endif %}
     {% for player in player_list %}
